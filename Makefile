@@ -24,12 +24,12 @@ ifeq ($(FF_VER), shared)
   LDFLAGS += -lavformat -lavcodec -lavutil
 else
   CXXFLAGS += -I./ffmpeg-$(FF_VER)
-  LDFLAGS += -Lffmpeg-$(FF_VER)/libavformat -lavformat
+  LDFLAGS += -static -Lffmpeg-$(FF_VER)/libavformat -lavformat
   LDFLAGS += -Lffmpeg-$(FF_VER)/libavcodec -lavcodec
   LDFLAGS += -Lffmpeg-$(FF_VER)/libavutil -lavutil
   #LDFLAGS += -Lffmpeg-$(FF_VER)/libswscale/ -lswresample
   #LDFLAGS += -Lffmpeg-$(FF_VER)/libavresample -lavresample
-  LDFLAGS += -lpthread -lz -lbz2 -lX11 -ldl -lva -lva-drm -lva-x11 -llzma -lxcb
+  LDFLAGS += -lpthread -lz -lbz2 -ldl -lva -lva-drm -lva-x11 -llzma -lxcb -Wl,-Bdynamic -lX11
 endif
 
 CXXFLAGS += -std=c++11
@@ -111,7 +111,7 @@ print_info: | $(FFDIR)
 	@echo
 
 $(EXE): print_info $(OBJ)
-	$(CXX) $(filter-out $<,$^) $(LDFLAGS) -o $@ -static
+	$(CXX) $(filter-out $<,$^) $(LDFLAGS) -o $@
 
 $(EXE)-gui: print_info $(filter-out $(DIR)/src/main.o, $(OBJ)) $(OBJ_GUI)
 	$(CXX) $(filter-out $<,$^) $(LDFLAGS) -o $@
