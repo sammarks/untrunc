@@ -111,7 +111,7 @@ print_info: | $(FFDIR)
 	@echo
 
 $(EXE): print_info $(OBJ)
-	$(CXX) $(filter-out $<,$^) $(LDFLAGS) -o $@
+	$(CXX) $(filter-out $<,$^) $(LDFLAGS) -o $@ -static
 
 $(EXE)-gui: print_info $(filter-out $(DIR)/src/main.o, $(OBJ)) $(OBJ_GUI)
 	$(CXX) $(filter-out $<,$^) $(LDFLAGS) -o $@
